@@ -1,0 +1,11 @@
+# macOS system files
+.DS_Store
+
+# Object files and executables
+*.o
+*.out
+*.exe
+*.dSYM/
+
+# Generated runtime files
+input.txt

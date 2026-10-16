@@ -11,11 +11,12 @@ The folders use week numbers. Question numbers restart for each section.
 | Week 2 | Classwork | 2 |
 | Week 3 | Classwork | 2 |
 | Week 4 | Classwork | 2 |
+| Week 5 | Classwork | 1 (Writer & Reader) |
 
 ## Compile and run
 
 Use Linux or macOS with GCC or Clang. These programs use Unix process
-functions such as `fork()`, `wait()`, and `execlp()`.
+functions such as `fork()`, `wait()`, `execlp()`, and `mkfifo()`.
 
 For example, from this folder:
 
@@ -28,21 +29,46 @@ gcc -std=c11 -Wall -Wextra Q1_pid_ppid.c -o q1
 Compile each C file separately, changing the source name and executable name
 for the question you want to run.
 
-## Notes
+For named pipes (Week 5 FIFO), compile both writer and reader and run them in separate terminals:
 
-- Fibonacci "up to n" means values no greater than n in these solutions.
-- Factorial inputs are limited to 0 through 20 so the result fits in an
-  `unsigned long long`.
-- Week 3 Question 1 calculates the array sum and checks primality in the child.
-  Week 4 Question 1 calculates the sum in the parent and checks it in the child.
-- The permutation program reads a word of up to 8 characters and prints each
-  permutation using recursion. Repeated letters may give repeated results.
-- PID values change each time a program runs. The three children may print in
-  a different order on different runs.
-- The orphan example uses short sleeps to let you see the PPID change. Its final
-  PPID belongs to the process that adopts it and is not necessarily 1.
-- For the zombie example, run the printed `ps` command in another terminal during
-  the parent's 10-second sleep. `Z` in the state column indicates a zombie.
-- The command-execution homework runs `date` because that is the lab question.
-- Week 4's file program asks for your details and creates `input.txt` in the
-  directory from which you run it. Running it again replaces that file.
+```sh
+# Terminal 1:
+cd "Week 5/Classwork"
+gcc -std=c11 -Wall -Wextra Q1_fifo_writer.c -o writer
+./writer
+
+# Terminal 2:
+cd "Week 5/Classwork"
+gcc -std=c11 -Wall -Wextra Q1_fifo_reader.c -o reader
+./reader
+```
+
+## Topic notes
+
+Each week has beginner-friendly explanations, examples, and quick viva revision.
+
+| Week | Notes |
+| --- | --- |
+| Week 1 | [Processes, fork, wait, orphan, zombie, and exec](Week%201/Topic%20Notes.md) |
+| Week 2 | [Prime numbers, factorial, Fibonacci, and Armstrong numbers](Week%202/Topic%20Notes.md) |
+| Week 3 | [Arrays, strings, recursion, and permutations](Week%203/Topic%20Notes.md) |
+| Week 4 | [Pipes, IPC, and file handling](Week%204/Topic%20Notes.md) |
+| Week 5 | [Named pipes (FIFO), mkfifo, and IPC between processes](Week%205/Topic%20Notes.md) |
+
+## Practice notes
+
+- The current Fibonacci programs print the first `n` terms.
+- Use small inputs for calculations. For the usual 32-bit `int` factorial in
+  Week 2, use 0 through 12; Week 1's `long long` factorial fits 0 through 20.
+- The Armstrong example uses cubes of digits. The Week 2 notes explain how this
+  differs from the general definition.
+- Arrays have room for 100 elements. Use a short word such as `abc` for
+  permutations; repeated letters may produce repeated lines.
+- PID values and process output order can change between runs.
+- For the zombie example, run `ps -l` in another terminal during the parent's
+  10-second sleep and look for the child's PID with state `Z`.
+- Week 4 Q1 transfers the parent's array sum through a pipe.
+- Week 4 Q2 writes sample details to `input.txt` in the directory from which
+  it runs. Replace the sample details in its `fprintf()` lines with your own.
+- Week 5 Q1 demonstrates IPC using a named pipe (`myfifo`). Run the writer and
+  reader in separate terminals so the writer passes the input message to the reader.
